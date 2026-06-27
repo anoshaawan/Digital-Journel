@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login - Digital Journal</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="admin-style.css" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #F8F6F3;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .login-card {
+            background: #FFFFFF;
+            border-radius: 12px;
+            padding: 48px 40px;
+            box-shadow: 0 8px 40px rgba(44, 62, 80, 0.08);
+            border: 1px solid #E8E0D5;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .login-badge {
+            display: inline-block;
+            background: #B8945C;
+            color: #FFFFFF;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+
+        .login-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2C3E50;
+            margin-bottom: 6px;
+        }
+
+        .login-logo i {
+            color: #B8945C;
+        }
+
+        .login-subtitle {
+            color: #7F8C8D;
+            font-size: 0.95rem;
+        }
+
+        .login-error {
+            background: #FEE2E2;
+            color: #991B1B;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+            display: none;
+            border-left: 3px solid #DC2626;
+        }
+
+        .login-error.show {
+            display: block;
+        }
+
+        .login-success {
+            background: #D1FAE5;
+            color: #065F46;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+            display: none;
+            border-left: 3px solid #10B981;
+        }
+
+        .login-success.show {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #2C3E50;
+            margin-bottom: 6px;
+        }
+
+        .form-group label i {
+            margin-right: 6px;
+            color: #B8945C;
+            width: 16px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #E8E0D5;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            background: #F8F6F3;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #4A6A7A;
+            background: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(74, 106, 122, 0.1);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: #2C3E50;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background: #3D5A5C;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(44, 62, 80, 0.2);
+        }
+
+        .btn-login:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-login i {
+            margin-right: 8px;
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #E8E0D5;
+            color: #7F8C8D;
+            font-size: 0.85rem;
+        }
+
+        .login-footer a {
+            color: #4A6A7A;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .login-footer a:hover {
+            color: #2C3E50;
+        }
+
+        .security-note {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            color: #7F8C8D;
+            font-size: 0.75rem;
+            margin-top: 10px;
+        }
+
+        .security-note i {
+            color: #B8945C;
+        }
+
+        .notification-toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            max-width: 400px;
+            padding: 16px 20px;
+            background: #2C3E50;
+            color: #FFFFFF;
+            border-radius: 8px;
+            box-shadow: 0 8px 32px rgba(44, 62, 80, 0.25);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transform: translateY(120px);
+            opacity: 0;
+            transition: all 0.4s ease;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .notification-toast.error {
+            border-left-color: #DC2626;
+        }
+
+        .notification-toast .notification-close {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.6);
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 0 4px;
+            margin-left: auto;
+        }
+
+        .notification-toast .notification-close:hover {
+            color: #FFFFFF;
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 32px 24px;
+            }
+
+            .login-logo {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-wrapper">
+        <div class="login-card">
+
+            <div class="login-header">
+                <span class="login-badge"><i class="fas fa-lock"></i> Admin Access</span>
+                <div class="login-logo"><i class="fas fa-book-open"></i> Digital Journal</div>
+                <p class="login-subtitle">Sign in to manage your publication</p>
+            </div>
+
+            <div class="login-error" id="loginError">
+                <i class="fas fa-exclamation-circle"></i> Invalid email or password. Please try again.
+            </div>
+
+            <div class="login-success" id="loginSuccess">
+                <i class="fas fa-check-circle"></i> Login successful! Redirecting...
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="adminEmail"><i class="fas fa-envelope"></i> Email Address</label>
+                    <input 
+                        type="email" 
+                        id="adminEmail" 
+                        placeholder="admin@digitaljournal.com" 
+                        value="affanawan189@gmail.com"
+                        required 
+                        autofocus
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="adminPassword"><i class="fas fa-lock"></i> Password</label>
+                    <input 
+                        type="password" 
+                        id="adminPassword" 
+                        placeholder="Enter your password" 
+                        required 
+                    />
+                </div>
+
+                <button type="submit" class="btn-login" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+            </form>
+
+            <div class="login-footer">
+                <p>
+                    <i class="fas fa-info-circle" style="color:#B8945C;"></i>
+                    Only authorized admins can access this panel.
+                </p>
+                <div class="security-note">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Secure login • Admin only</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ✅ FIREBASE LOGIN SCRIPT (auth-check.js REMOVED) -->
+    <script type="module">
+// ============================================================
+// IMPORT FIREBASE - FIXED
+// ============================================================
+import { 
+    auth, 
+    signInWithEmailAndPassword, 
+    onAuthStateChanged 
+} from '../firebase-config.js';
+
+// Admin email
+const ADMIN_EMAIL = "affanawan189@gmail.com";
+
+// ✅ Check if already logged in - redirect to dashboard
+onAuthStateChanged(auth, (user) => {
+    if (user && user.email === ADMIN_EMAIL) {
+        window.location.href = 'dashboard.html';
+    }
+});
+
+const loginForm = document.getElementById('loginForm');
+const loginError = document.getElementById('loginError');
+const loginSuccess = document.getElementById('loginSuccess');
+const loginBtn = document.getElementById('loginBtn');
+
+loginForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById('adminEmail').value.trim();
+    const password = document.getElementById('adminPassword').value.trim();
+
+    // Validate empty fields
+    if (!email || !password) {
+        showError('Please enter both email and password.');
+        return;
+    }
+
+    // Check if it's the admin email
+    if (email !== ADMIN_EMAIL) {
+        showError('Access denied. Admin only.');
+        return;
+    }
+
+    // Disable button during login
+    loginBtn.disabled = true;
+    loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+
+    try {
+        // Sign in with Firebase
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        
+        // Success
+        loginError.classList.remove('show');
+        loginSuccess.classList.add('show');
+        
+        // Redirect to dashboard
+        setTimeout(() => {
+            window.location.href = 'dashboard.html';
+        }, 1500);
+
+    } catch (error) {
+        // Handle errors
+        let errorMessage = 'Login failed. Please try again.';
+        
+        switch(error.code) {
+            case 'auth/user-not-found':
+                errorMessage = 'No account found with this email.';
+                break;
+            case 'auth/wrong-password':
+                errorMessage = 'Incorrect password. Please try again.';
+                break;
+            case 'auth/invalid-email':
+                errorMessage = 'Invalid email format.';
+                break;
+            case 'auth/too-many-requests':
+                errorMessage = 'Too many failed attempts. Please try again later.';
+                break;
+            default:
+                errorMessage = error.message;
+        }
+        
+        showError(errorMessage);
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
+    }
+});
+
+function showError(message) {
+    loginError.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+    loginError.classList.add('show');
+    loginSuccess.classList.remove('show');
+
+    clearTimeout(window.errorTimeout);
+    window.errorTimeout = setTimeout(() => {
+        loginError.classList.remove('show');
+    }, 5000);
+}
+
+// Keyboard shortcut: Enter to submit
+document.getElementById('adminPassword').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        loginForm.dispatchEvent(new Event('submit'));
+    }
+});
+
+console.log('%c🔐 Admin Login with Firebase', 'font-size:20px;font-weight:bold;color:#2C3E50;');
+console.log('%c📧 Admin Email: affanawan189@gmail.com', 'font-size:13px;color:#4A6A7A;');
+console.log('%c✅ Login page loaded successfully', 'font-size:12px;color:#4CAF50;');
+</script>
+
+</body>
+</html>
